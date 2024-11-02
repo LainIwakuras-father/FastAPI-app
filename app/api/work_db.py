@@ -8,6 +8,7 @@ db_router = APIRouter(prefix="/Api",tags=['Api'])
 async def create_table():
     try:
         await create_database()
+        return JSONResponse({"message": "Models created!"}, status_code=201)
     except Exception as e:
         print(e)
         raise HTTPException(500, "Server error!")

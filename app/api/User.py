@@ -29,7 +29,7 @@ async def user_create(
 async def user_read(
         id:int,
         service: Annotated[UserService,Depends(user_service)]
-        ):
+        )->dict:
     user = await service.get_user_info(id)
     return {'user':user}
 
@@ -38,7 +38,7 @@ async def user_read(
 async def delete_user(
         id:int,
         service: Annotated[UserService,Depends(user_service)]
-        ):
+        )->str:
     res = await service.delete_user(id)
     return res
 

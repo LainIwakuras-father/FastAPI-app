@@ -1,3 +1,8 @@
+
+
+from fastapi.exceptions import RequestValidationError
+
+
 from app.schemas.item_schema import ItemWrite, ItemUpdate
 from app.utils.repository import AbstractRepository
 
@@ -8,17 +13,19 @@ class ItemService:
 
     async def add_item(self, item: ItemWrite):
         product_dict = item.model_dump()
+        if product_dict['amount'] < 0:
+                raise RequestValidationError("не может быть отрицательной цены!")
         product_id = await self.items_repo.add_one(product_dict)
         return product_id
 
     async def get_items(self):
-        items = await self.items_repo.find_all()
-        return items
+        return await self.items_repo.find_all()
 
-    async def update_info(self, id: int, new_data: ItemUpdate):
-        result = await self.items_repo.update_info(id, new_data)
-        return result
+    async def update_info(self, id: int, new_data: ItemUpdate)->str:
+        dict = new_data.model_dump()
+        if dict['amount'] < 0:
+                raise RequestValidationError("не может быть отрицательной цены!")
+        return await self.items_repo.update_info(id, dict)
 
-    async def delete_item(self, id):
-        result = await self.items_repo.delete_item(id)
-        return result
+    async def delete_item(self, id)->str:
+        return  await self.items_repo.delete_item(id)
