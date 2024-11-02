@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from sqlalchemy.orm import DeclarativeBase
 
 
-from app2.db.configs import DB_USER, DB_PASS, DB_HOST, DB_NAME
+from app.db.configs import DB_USER, DB_PASS, DB_HOST, DB_NAME
 
 DB_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}'
 
@@ -23,10 +23,6 @@ async def create_database():
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
-
-# async def delete_database():
-#     async with engine.begin as conn:
-#         conn.run_sync(Base.metadata.drop_all)
 
 """
 Создание сессии для работы с БД
